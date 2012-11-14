@@ -1,0 +1,21 @@
+/* New styles below */
+
+label.valid {
+    width: 24px;
+    height: 24px;
+    background: url(/static/img/valid.png) center center no-repeat;
+    display: inline-block;
+    text-indent: -9999px;
+}
+label.error {
+    color: red;
+    margin: 0px;
+    margin-top: 2px;
+}
+
+.input-block-level {
+    display: block;
+    width: 100%;
+    min-height: 28px;
+    .box-sizing(border-box);
+}

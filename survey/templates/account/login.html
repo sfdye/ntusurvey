@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+    <div class="tooltip-demo bs-docs-tooltip-examples">
+
+        <h3 style="margin-left: 50px;"> Log in to NTUSurvey
+
+            <a href="#" rel="tooltip" data-placement="right" title="
+                         How to login?
+1.Make sure no one else is logged in.
+2.Enter your e-mail address or username
+3.Enter your password
+4.Click log in button below
+                         "><i class="icon-question-sign"></i></a>
+        </h3>
+    </div>
+    <br>
+    {% if error %}
+        <p class="error">Sorry, that's not a valid username or password</p>
+    {% endif %}
+    <br>
+    <div class="row fluid">
+        <div class="span4 offset3">
+            <form class="form-horizontal" method="post">
+
+                <div class="control-group">
+                    <label class="control-label" for="username_or_email"><i class="icon-user"></i>Username</label>
+
+                    <div class="controls">
+                        <input type="text" id="username_or_email" name="username_or_email" placeholder="Username">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="password"><i class="icon-lock"></i>Password</label>
+
+                    <div class="controls">
+                        <input type="password" id="password" name="password" placeholder="Password">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <div class="tooltip-demo bs-docs-tooltip-examples">
+                            <a style="color: #ff4500; margin-left: 12px;" href="/account/password_reset">Forget
+                                password</a>
+
+                            <a href="#" rel="tooltip" data-placement="top" title="
+                         Forget password?
+                         1.click “forget password” link besides the password box;
+                         2.type in your e-mail;
+                         3.click reset password button.
+                         "><i class="icon-question-sign"></i></a>
+                        </div>
+                        <br>
+                        <button style="margin-left: 60px;" type="submit" class="btn btn-danger">Log in</button>
+
+                    </div>
+
+                </div>
+
+            </form>
+            <a href="/account/signup" style="margin-left: 227px;">
+                <button style="margin-left: 10px;" class="btn btn-inverse">Sign up</button>
+            </a>
+
+        </div>
+        <p style="margin-left:10px; margin-top:94px; color: #ff4500;">
+
+        </p>
+    </div>
+{% endblock %}

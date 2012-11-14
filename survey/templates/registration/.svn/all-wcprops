@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/Stardom/!svn/ver/280/survey/templates/registration
+END
+password_reset_form.html
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/Stardom/!svn/ver/280/survey/templates/registration/password_reset_form.html
+END
+password_reset_done.html
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/Stardom/!svn/ver/263/survey/templates/registration/password_reset_done.html
+END
+password_reset_complete.html
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/Stardom/!svn/ver/263/survey/templates/registration/password_reset_complete.html
+END
+password_reset_confirm.html
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/Stardom/!svn/ver/280/survey/templates/registration/password_reset_confirm.html
+END

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/Stardom/!svn/ver/308/survey/templates/account
+END
+json_userlist
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/Stardom/!svn/ver/263/survey/templates/account/json_userlist
+END
+login.html
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/Stardom/!svn/ver/305/survey/templates/account/login.html
+END
+edit_profile.html
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/Stardom/!svn/ver/308/survey/templates/account/edit_profile.html
+END
+register.html
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/Stardom/!svn/ver/263/survey/templates/account/register.html
+END
+activation_complete.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/Stardom/!svn/ver/295/survey/templates/account/activation_complete.html
+END
+registration_complete.html
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/Stardom/!svn/ver/295/survey/templates/account/registration_complete.html
+END
+display_users.html
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/Stardom/!svn/ver/263/survey/templates/account/display_users.html
+END
+change_password.html
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/Stardom/!svn/ver/263/survey/templates/account/change_password.html
+END

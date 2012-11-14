@@ -1,0 +1,766 @@
+{% extends "base.html" %}
+
+
+{% block script %}
+
+
+    <style>
+        button {
+            display: inline-block;
+            *display: inline;
+            padding: 4px 14px;
+            margin-bottom: 0;
+            *margin-left: .3em;
+            font-size: 14px;
+            line-height: 20px;
+            *line-height: 20px;
+            color: #333333;
+            text-align: center;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+            vertical-align: middle;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            *background-color: #e6e6e6;
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+            background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+            background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+            background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+            background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+            background-repeat: repeat-x;
+            border: 1px solid #bbbbbb;
+            *border: 0;
+            border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+            border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+            border-bottom-color: #a2a2a2;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+            filter: progid:dximagetransform.microsoft.gradient(enabled=false);
+            *zoom: 1;
+            -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        button:hover,
+        button:active,
+        button.active,
+        button.disabled,
+        button[disabled] {
+            color: #333333;
+            background-color: #e6e6e6;
+            *background-color: #d9d9d9;
+        }
+
+        button:active,
+        button.active {
+            background-color: #cccccc \9;
+        }
+
+        button:first-child {
+            *margin-left: 0;
+        }
+
+        button:hover {
+            color: #333333;
+            text-decoration: none;
+            background-color: #e6e6e6;
+            *background-color: #d9d9d9;
+            /* Buttons in IE7 don't get borders, so darken on hover */
+
+            background-position: 0 -15px;
+            -webkit-transition: background-position 0.1s linear;
+            -moz-transition: background-position 0.1s linear;
+            -o-transition: background-position 0.1s linear;
+            transition: background-position 0.1s linear;
+        }
+
+        button:focus {
+            outline: thin dotted #333;
+            outline: 5px auto -webkit-focus-ring-color;
+            outline-offset: -2px;
+        }
+
+        button.active,
+        button:active {
+            background-color: #e6e6e6;
+            background-color: #d9d9d9 \9;
+            background-image: none;
+            outline: 0;
+            -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        button.disabled,
+        button[disabled] {
+            cursor: default;
+            background-color: #e6e6e6;
+            background-image: none;
+            opacity: 0.65;
+            filter: alpha(opacity=65);
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+        }
+        #question_container{
+            width: 700px;
+        }
+        .ui-state-highlight{
+            height: 1.5em;
+            line-height: 1.2em;
+        }
+        .singleQuestionDiv{
+            float:left;
+            clear:left;
+            width: 600px;
+            margin-bottom: 20px;
+        }
+        .pink_background{
+            background-color: #eeeeee;
+        }
+        .hideable{
+            display: none;
+        }
+        .questionDiv{
+            width: 700px;
+        }
+        .buttonDiv{
+            float: right;
+            vertical-align: middle;
+            text-align: center;
+            line-height: 20px;
+        }
+        .buttonDiv button{
+            width: 80px;
+        }
+        .clearBoth{
+            clear:both;
+        }
+        .radio input[type="radio"], .checkbox input[type="checkbox"] {
+            float: none;
+            margin-left: 0px;
+        }
+        .radio, .checkbox {
+            min-height: 0px;
+            padding-left: 0px;
+        }
+        #errors {
+            color: red;
+        }
+        .slider{
+            width: 300px;
+        }
+        .hide{
+            display: none;
+        }
+
+    </style>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+    <script>
+    {% ifequal user.username "" %}
+        location.href = "/error_jump/not_login/"
+    {% endifequal %}
+
+    surveyID = 0;
+    {% if surveyID %}
+        surveyID = {{ surveyID }};
+    {% endif %}
+    $(function(){
+        themeName = "grass";
+        {% if survey %}
+            {% if user.username != survey.user.username and not is_collaborator %}
+                location.href = "/error_jump/unauthorized/"
+            {% endif %}
+            themeName = "{{ survey.theme_name }}"
+            {% if survey.is_published %}
+                $("#saveSurveyButton").text("Unpublish & Save");
+                $("#publishSurveyButton").text("Update")
+                {% if is_collaborator %}
+                    creatorID = {{ survey.user.id }}
+                            $("#saveSurveyButton").attr("disabled","disabled");
+                            $("#errors").html("<li>Note: This survey is published. If you want to make some changes, please contact the owner of this survey to unpublish it.</li>");
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        creatorID = {{ user.id }}
+        {% if is_collaborator %}
+            creatorID = {{ survey.user.id }}
+            $("#publishSurveyButton").attr("disabled","disabled");
+        {% endif %}
+        {% if surveyID %}
+            fetchQuestions_1();
+        {% endif %}
+        useEditable();
+        publishBool = false;
+        $("body").css({"background": 'url({{ STATIC_URL }}img/themes/'+themeName+'.jpg)',
+                "background-repeat": "no-repeat",
+                "background-size":"cover"});
+        $(".dropdown-menu").find("li").click(function(){
+            themeName = $(this).text().toLowerCase();
+            $("body").css({"background" : 'url({{ STATIC_URL }}img/themes/'+themeName+'.jpg)',
+                "background-repeat": "no-repeat",
+                "background-size":"cover"});
+        });
+        $( ".datepicker_container" ).each(function(){
+            minDate = $(this).find(".datepicker_min_value").text();
+            maxDate  = $(this).find(".datepicker_max_value").text();
+            $(this).find(".datepicker").datepicker({
+                minDate: minDate,
+                maxDate: maxDate,
+                dateFormat: "dd/mm/yy",
+            });
+        });
+        $("#addButton").click(function(){
+            $.post('/edit_survey/',
+                    {
+                        question_type: $('#add_list').val()
+                    },
+                    function(result){
+                        createQuestion(result.content,$('#add_list').val());
+                    },"json");
+
+        });
+        $("#saveSurveyButton").click(function(){
+            validate_survey();
+        });
+        $("#publishSurveyButton").click(function(){
+            publishBool = true;
+            $("#saveSurveyButton").click();
+        });
+    })
+    function initialSurvey(){
+    {% if survey %}
+        {% if survey.is_published %}
+            if (!confirm("This survey has been published already. This operation will clear all the responses. Continue? ")){
+                return;
+            }
+        {% endif %}
+    {% endif %}
+
+        if (surveyID!=0){
+            $.post("/delete_survey/",
+                    {
+                        surveyID: surveyID,
+                    },
+                    function(result){
+                    },"json");
+        }
+
+        $.post("/create_survey/",
+                {
+                    survey_title :surveyTitle,
+                    survey_description: surveyDescription,
+                    publishBool: publishBool,
+                    theme_name: themeName,
+                    survey_deadline: surveyDeadline,
+                    creatorID: creatorID,
+                    is_collaborator: "{{ is_collaborator }}",
+                    collaborators: "{{ collaborators }}",
+                },
+                function(result){
+                    surveyID = result.surveyID;
+                    surveyKey = result.survey_key;
+                    saveSurvey();
+                },"json");
+    }
+    {% for question in survey.questions.all|dictsort:"id_in_survey" %}
+        function fetchQuestions_{{ question.id_in_survey }}(){
+            $.post('/edit_survey/',
+                    {
+                        question_type: '{{ question.type }}',
+                        question_description: '{{ question.title }}',
+                        question_helptext : '{{ question.helptext }}',
+                        questionID : "{{ question.id }}"
+                    },
+                    function(result){
+                        createQuestion(result.content,"{{ question.type }}");
+                        fetchQuestions_{{ question.id_in_survey|add:"1" }}();
+                    },"json");
+        }
+    {% endfor %}
+    function saveSurvey(){
+        saveCount = 0;
+        for (var i=1;i<=total;i++){
+            var curQuestionDiv = $(".questionDiv:nth-child("+i+")");
+            var questionNo = curQuestionDiv.find(".question_no").text();
+            questionNo = questionNo.slice(1,-1);
+            var questionTitle = curQuestionDiv.find(".question_description").text();
+            var questionHelptext = curQuestionDiv.find(".question_helptext").text();
+            if (questionHelptext == "Click here to add help text")
+                questionHelptext = "";
+            if (questionHelptext == "Click here to add...")
+                questionHelptext = "";
+            var questionType = "";
+            if (curQuestionDiv.hasClass("paragraph"))
+                questionType = "paragraph";
+            else if (curQuestionDiv.hasClass("numeric"))
+                questionType = "numeric";
+            else if (curQuestionDiv.hasClass("multiplechoice"))
+                questionType = "multiplechoice";
+            else if (curQuestionDiv.hasClass("checkbox"))
+                questionType = "checkbox";
+            else if (curQuestionDiv.hasClass("scale"))
+                questionType = "scale";
+            else if (curQuestionDiv.hasClass("date"))
+                questionType = "date";
+            else if (curQuestionDiv.hasClass("text"))
+                questionType = "text";
+            var selections = curQuestionDiv.find(".selection").find("span").text(function(index,text){
+                return text+"@#@"
+            }).text();
+            curQuestionDiv.find(".selection").find("span").text(function(index,text){
+                return text.slice(0,-3);
+            });
+            var attributes_no = 0;
+            attributes_no = curQuestionDiv.find("#attributes").find("input").length;
+            var attributes = "";
+            for (var j=1;j<=attributes_no;j++){
+                attributes += curQuestionDiv.find("#attributes").find("input:nth-child("+ (j*2-1) +")").val();
+                attributes += "@#@";
+            }
+            is_required = curQuestionDiv.find("#is_required").is(":checked");
+            $.post("/"+ surveyID +"/save_survey/",
+                    {
+                        question_type: questionType,
+                        question_no: questionNo,
+                        question_helptext:questionHelptext,
+                        question_title: questionTitle,
+                        selections : selections,
+                        attributes: attributes,
+                        is_required: is_required,
+                        creatorID: creatorID,
+                    },
+                    function(result){
+                        surveyID = result.surveyID;
+                        saveCount+=1;
+                        if (saveCount == total)
+                            finishAndJump();
+                    },"json");
+
+        }
+
+
+    }
+    function validate_survey(){
+        total = $(".questionDiv").length;
+        if (total == 0){
+            alert("empty survey");
+            return;
+        }
+        surveyTitle = $("#survey_title").text();
+        surveyDescription = $("#survey_description").text();
+        surveyDeadline = $("#deadline").find("input").val();
+        count = 0;
+        errors = "";
+        for (var i=1;i<=total;i++){
+            var curQuestionDiv = $(".questionDiv:nth-child("+i+")");
+            var questionNo = curQuestionDiv.find(".question_no").text();
+            questionNo = questionNo.slice(1,-1);
+            var questionTitle = curQuestionDiv.find(".question_description").text();
+            var questionHelptext = curQuestionDiv.find(".question_helptext").text();
+            if (questionHelptext == "Click here to add help text")
+                questionHelptext = "";
+            if (questionHelptext == "Click here to add...")
+                questionHelptext = "";
+            var questionType = "";
+            if (curQuestionDiv.hasClass("paragraph"))
+                questionType = "paragraph";
+            else if (curQuestionDiv.hasClass("numeric"))
+                questionType = "numeric";
+            else if (curQuestionDiv.hasClass("multiplechoice"))
+                questionType = "multiplechoice";
+            else if (curQuestionDiv.hasClass("checkbox"))
+                questionType = "checkbox";
+            else if (curQuestionDiv.hasClass("scale"))
+                questionType = "scale";
+            else if (curQuestionDiv.hasClass("date"))
+                questionType = "date";
+            else if (curQuestionDiv.hasClass("text"))
+                questionType = "text";
+            var selections = curQuestionDiv.find(".selection").find("span").text(function(index,text){
+                return text+"@#@"
+            }).text();
+            curQuestionDiv.find(".selection").find("span").text(function(index,text){
+                return text.slice(0,-3);
+            });
+            var attributes_no = 0;
+            attributes_no = curQuestionDiv.find("#attributes").find("input").length;
+            var attributes = "";
+            for (var j=1;j<=attributes_no;j++){
+                attributes += curQuestionDiv.find("#attributes").find("input:nth-child("+ (j*2-1) +")").val();
+                attributes += "@#@";
+            }
+
+            $.post("/validate_survey/",
+                    {
+                        question_type: questionType,
+                        question_no: questionNo,
+                        question_helptext:questionHelptext,
+                        question_title: questionTitle,
+                        selections : selections,
+                        attributes: attributes,
+                        survey_title: surveyTitle,
+                        survey_description: surveyDescription,
+                        survey_deadline: surveyDeadline,
+                        surveyID : surveyID,
+                    },
+                    function(result){
+                        count+=1;
+                        errors += result.errors;
+                        if (count==total&&errors==""){
+                            initialSurvey();
+                        } else{
+                            if (count==total)
+                                publishBool = false;
+                            $("#errors").html(errors);
+                        }
+                    },"json");
+
+        }
+
+
+    }
+    function finishAndJump(){
+        if (publishBool == true){
+            window.location = "/publish/"+surveyKey;
+        }else{
+            window.location = "/account/";
+        }
+    }
+    function createQuestion(html,type){
+        container = document.getElementById('question_container');
+        questionDiv = document.createElement("div");
+        $(questionDiv).html(html).attr('name',"questionDiv").addClass("questionDiv").addClass(type);
+        container.appendChild(questionDiv);
+        //Number the new Question
+        numberQuestionDiv(questionDiv);
+        // make text editable
+        useEditable();
+        // make questions sortable
+        $(".sortable").sortable({
+            placeholder: "ui-state-highlight"
+        });
+        $(".sortable").disableSelection();
+        $(questionDiv).find(".slider").slider({
+            value:0,
+            min: 0,
+            max: 500,
+            step: 50,
+            animate: true,
+            slide: function( event, ui ) {
+            }
+        });
+        //create datepicker
+        $(".datepicker_flexible_container").find(".datepicker").datepicker({
+            dateFormat: "dd/mm/yy",
+        });
+        // make it responsive to click
+        $(questionDiv).click(function(){
+            if ($(this).find(".singleQuestionDiv").hasClass("pink_background"))
+                return;
+            if ($("div.pink_background .question_helptext").text()=="")
+                $("div.pink_background .question_helptext").text("Click here to add...");
+            if ($("div.pink_background .question_helptext").text()!="Click here to add..." &&
+                    $("div.pink_background .question_helptext").text()!="Click here to add help text"){
+                $("div.pink_background .question_helptext").removeClass("hideable");
+            }
+            else{
+                $("div.pink_background .question_helptext").addClass("hideable");
+            }
+            $("div.pink_background .hideable").hide('slow');
+            $(this).siblings().find(".buttonDiv").hide('slow');
+            $(this).find(".buttonDiv").show('slow');
+            $(this).find(".singleQuestionDiv").addClass("pink_background");
+            $(this).siblings().find(".singleQuestionDiv").removeClass("pink_background");
+            $(this).find(".hideable").show('slow');
+        });
+        //add confirm and delete button;
+        buttonDiv = document.createElement("div");
+        questionDiv.appendChild(buttonDiv);
+        $(buttonDiv).addClass('buttonDiv').hide();
+        br = document.createElement("br");
+        upButton = document.createElement("button");
+        confirmButton = document.createElement("button");
+        deleteButton = document.createElement("button");
+        downButton = document.createElement("button");
+        $(upButton).text('up');
+        $(confirmButton).text('Confirm');
+        $(deleteButton).text('Delete');
+        $(downButton).text("down")
+        buttonDiv.appendChild(upButton);
+        buttonDiv.appendChild(confirmButton);
+        buttonDiv.appendChild(deleteButton);
+        buttonDiv.appendChild(downButton);
+        $(buttonDiv).find("button").after("<br />")
+        //make button responsive to click
+        $(confirmButton).click(function(e){
+            if ($("div.pink_background .question_helptext").text()=="")
+                $("div.pink_background .question_helptext").text("Click here to add...");
+            if ($("div.pink_background .question_helptext").text()!="Click here to add..."){
+                $("div.pink_background .question_helptext").removeClass("hideable");
+            }
+            else{
+                $("div.pink_background .question_helptext").addClass("hideable");
+            }
+            $("div.pink_background .hideable").hide('slow');
+            $("div.pink_background").removeClass("pink_background");
+            $(this).parent().hide("slow");
+            e.stopPropagation();
+        });
+        $(deleteButton).click(function(){
+            $(".pink_background").parent().hide('slow',function(){
+                $(this).remove();
+                reNumberAll();
+            });
+        });
+        $(upButton).click(function(){
+            curQuestionDiv = $(".pink_background").parent()
+            curQuestionNo = $(curQuestionDiv).find(".question_no").text().slice(1,-1);
+            if (curQuestionNo==1)
+                return;
+            prevQuestionDiv = $(".questionDiv:nth-child("+(curQuestionNo-1)+")");
+            $(curQuestionDiv).hide();
+            $(prevQuestionDiv).before($(curQuestionDiv));
+            $(curQuestionDiv).show();
+            reNumberAll();
+        });
+        $(downButton).click(function(){
+            curQuestionDiv = $(".pink_background").parent()
+            curQuestionNo = $(curQuestionDiv).find(".question_no").text().slice(1,-1);
+            if (curQuestionNo==$(".questionDiv").length)
+                return;
+            nextQuestionDiv = $(".questionDiv:nth-child("+(Number(curQuestionNo)+1)+")");
+            $(curQuestionDiv).hide()
+            $(nextQuestionDiv).after($(curQuestionDiv));
+            $(curQuestionDiv).show();
+            reNumberAll();
+
+
+        });
+        // for add new selection button
+        $(questionDiv).find(".addNewSelection").click(function(){
+            var curQuestionDiv = $(".pink_background.singleQuestionDiv").parent();
+            singleSelection = curQuestionDiv.find(".selection:first").clone()
+            singleSelection.find("span").text("sample").addClass("editable");
+            singleSelection.appendTo(curQuestionDiv.find(".selections_container"));
+            useEditable();
+            selectionDeletable(singleSelection);
+            singleSelection.mouseout(function(event){
+                selectionMouseout(event,this);
+            });
+            singleSelection.mouseover(function(event){
+                selectionMouseover(event,this);
+            });
+        });
+        $(questionDiv).find(".selection").mouseover(function(event){
+            selectionMouseover(event,this);
+        });
+        $(questionDiv).find(".selection").mouseout(function(event){
+            selectionMouseout(event,this);
+        });
+    }
+    function selectionDeletable(singleSelection){
+        $("<button>Delete</button>").appendTo(singleSelection).click(function(){
+            if ($(".selections_container").has($(this)).find(".selection").length == 1)
+                return;
+            $(this).parent().remove();
+        });
+    }
+    function selectionMouseover(event,selection){
+        var event=event||window.event;
+        if(event){
+            if(selection.contains(event.relatedTarget||event.toElement)){
+                return;
+            }
+            selectionDeletable(selection);
+        }
+    }
+    function selectionMouseout(event,selection){
+        var event=event||window.event;
+        if(event){
+            if(selection.contains(event.relatedTarget||event.toElement)){
+                return;
+            }
+            $(selection).find("button").remove();
+        }
+    }
+    function numberQuestionDiv(questionDiv){
+        n = $("span.question_no").length;
+        $(questionDiv).find("span.question_no").text("Q"+n+":");
+    }
+    function reNumberAll(){
+        n = $(".questionDiv").length;
+        for (var i=1;i<=n;i++)
+            $(".questionDiv:nth-child("+i+")").find("span.question_no").text("Q"+i+":");
+    }
+    function useEditable(){
+        $(".editable").removeClass('editable').click(function(){
+            $("input:focus").focusout();
+            currentSpan = $(this);
+            content = $(this).text();
+            parentDiv = $(this.parentNode);
+            editorWidth = content.length*6;
+            if (editorWidth<60)
+                editorWidth=60;
+            if (editorWidth>600)
+                editorWidth=600;
+
+            editor = $("<input type='text' />");
+            editor.css('width',editorWidth.toString()+'px');
+            editor.val(content);
+
+
+            //  html += "<button>finish</button>"
+            editorSpan = $("<span></span>");
+            editorSpan.append(editor);
+            currentSpan.after(editorSpan);
+            currentSpan.hide();
+            editor.focus();
+            editor.select();
+            editor.keypress(function(event){
+                if (event.which==13)
+                    editor.focusout();
+            });
+            editor.focusout(function(){
+                currentSpan.html(editor.val());
+                if (currentSpan.text()=="")
+                    currentSpan.text("Click here to add...")
+                currentSpan.show();
+                editorSpan.remove();
+            });
+
+
+        });
+    }
+
+    {% comment %}    function typeChange(){
+      question_type = $('#add_list').val();
+      attr_container = document.getElementById('add_form_attr');
+      html = ""
+      if (question_type=="paragraph"){
+          html = "Max length:<input type='text' id='max_length' value=200 />";
+      }
+      else if(question_type=="mcq"){
+      }
+      $(attr_container).html(html)
+
+  }{% endcomment %}
+    </script>
+{% endblock %}
+
+
+{% block content %}
+
+    <style type="text/css">
+        body { text-align: left; }
+    </style>
+
+
+    {% load static %}
+    <div style="margin-left: 100px;">
+
+        <div class="row tooltip-demo bs-docs-tooltip-examples">
+        <img class="pull-left" src="{% static "img/createshow.png"%}" alt="Create Survey">
+<br><br><br><br>
+            <a class="pull-left" href="#" rel="tooltip" data-placement="top" title="How to create survey and edit questions?
+Specify survey name, description and deadline in the title region.
+To proceed question editing, click on the question panel, an editing panel will appears.
+You can specify the question types, details, arrange positions and confirm question editing from editing panel.
+"><i class="icon-question-sign" style="margin-top: 5px;"></i></a>
+<br>
+            <!-- Button to trigger modal -->
+            <a href="#myModal" role="button" class="btn pull-left pull-down" data-toggle="modal">Help<i class="icon-film"></i></a></li></a>
+
+            <!-- Modal -->
+            <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <object id="vp1YP192" width="432" height="243" classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"><param name="movie" value="http://static.animoto.com/swf/w.swf?w=swf/vp1&e=1351859479&f=YP192X0X7FEj05d9wasJmA&d=35&m=b&r=360p&volume=100&start_res=360p&i=m&options="></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed id="vp1YP192" src="http://static.animoto.com/swf/w.swf?w=swf/vp1&e=1351859479&f=YP192X0X7FEj05d9wasJmA&d=35&m=b&r=360p&volume=100&start_res=360p&i=m&options=" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="432" height="243"></embed></object>
+                </div>
+            </div>
+
+        </div>
+<br>
+        <div class="progress">
+            <div class="bar bar-success" style="width: 0%;"></div>
+            <div class="bar bar-warning" style="width: 33%;"></div>
+            <div class="bar bar-danger" style="width: 0%;"></div>
+        </div>
+        <hr>
+
+
+        <h2><div id="survey_title" class="editable">{{ title }}</div></h2>
+        <h3><div id="survey_description" class="editable">{{ description }}</div></h3>
+        <div id="deadline" class="datepicker_container">Deadline: <input type="text" value="{{ deadline }}" class="datepicker" />
+            <span class="hide datepicker_min_value">0</span>
+            <span class="hide datepicker_max_value">+1Y</span>
+        </div>
+        <div id="question_container" class=""></div>
+        <div class="clearBoth">
+            <form id="add_form" action="/edit_survey/" method="POST">
+                <select id="add_list" name="add_list" >
+                    <option value="paragraph">Paragraph</option>
+                    <option value="numeric">Numeric</option>
+                    <option value="multiplechoice">Multiple choice question</option>
+                    <option value="checkbox">Check box</option>
+                    <option value="scale">Scale bar</option>
+                    <option value="date">Date</option>
+                    <option value="text">Text</option>
+                </select>
+
+                <span id="add_form_attr"></span>
+                <input type="button" id="addButton" class="btn" value="add"/>
+            </form>
+            <ul id="errors"></ul><br />
+            <br><br>
+
+            <div>
+                <button class="btn btn-danger"  id="saveSurveyButton">Save Draft</button>
+                <button class="btn btn-inverse" id="publishSurveyButton">Publish</button>
+
+                <li class="dropdown btn btn-danger">
+                    <a href="" style="color: #ffffff;" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Theme<b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="theme">
+                        <li><a>Bud</a></li>
+                        <li><a>Cloud</a></li>
+                        <li><a>Daisy</a></li>
+                        <li><a>Lake</a></li>
+                        <li><a>City</a></li>
+                        <li><a>Lavender</a></li>
+                        <li><a>Raindrop</a></li>
+                        <li><a>Rose</a></li>
+                        <li><a>Tree</a></li>
+                        <li><a>Winter</a></li>
+                    </ul>
+
+                </li>
+
+            </div>
+        </div>
+
+        <!--
+            <a href="#" rel="popover" title="How to create a survey?" data-content="
+            1. Name your survey with description.
+            2. Select the desired question type and click add button.
+            4. Key in question details with interactive widget.
+            5. Click the confirm button to confirm the question.
+            6. Click publish button to publish the survey, or save to edit later. "><i class="icon-question-sign"></i></a>
+        -->
+
+
+
+
+    </div>
+{% endblock %}
+
+
+
+
+
+

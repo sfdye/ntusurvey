@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+
+{% block title %} {{ survey.title }} {% endblock %}
+{% block navigationBar %}{% endblock %}
+{% block script %}
+
+
+    <style type="text/css">
+        body { text-align: center; }
+    </style>
+    <style>
+        #question_container{
+            width: 700px;
+            text-align: left;
+            margin: 0 auto;
+        }
+
+        .singleQuestionDiv{
+            float:left;
+            clear:left;
+            width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .questionDiv{
+            width: 700px;
+        }
+        .clearBoth{
+            clear:both;
+        }
+        .radio input[type="radio"], .checkbox input[type="checkbox"] {
+            float: none;
+            margin-left: 0px;
+        }
+        .radio, .checkbox {
+            min-height: 0px;
+            padding-left: 0px;
+        }
+        #errors {
+            color: red;
+            float: left;
+        }
+        .is_required{
+            color: red;
+        }
+        .hide {
+            display:  none;
+        }
+        .slider{
+            width: 300px;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.1/jquery-ui.js"></script>
+    <script>
+
+        responseID = ""
+        $(function(){
+            $( ".datepicker_container" ).each(function(){
+                minDate = $(this).find(".datepicker_min_value").text();
+                maxDate  = $(this).find(".datepicker_max_value").text();
+                $(this).find(".datepicker").datepicker({
+                    minDate: minDate,
+                    maxDate: maxDate,
+                    dateFormat: "dd/mm/yy",
+                });
+            });
+            $(".scale").each(function(){
+                cur = $(this);
+                slider_max = $(this).find(".slider_max").text();
+                slider_min = $(this).find(".slider_min").text();
+                slider_increment = $(this).find(".slider_increment").text()
+                $(this).find(".slider_value").text((parseFloat(slider_min)+parseFloat(slider_max))/2)
+                $(this).find(".slider").slider({
+                    value: (parseFloat(slider_min)+parseFloat(slider_max))/2,
+                    min: parseFloat(slider_min),
+                    max: parseFloat(slider_max),
+                    step: parseFloat(slider_increment),
+                    animate: true,
+                    slide: function( event, ui ){
+                        $(cur).find(".slider_value").text(ui.value);
+                    }
+                });
+            });
+            $("body").css({"background" : 'url({{ STATIC_URL }}img/themes/{{ survey.theme_name }}.jpg)',
+                "background-repeat": "no-repeat",
+                "background-size":"cover"})
+            {% if not survey.is_published %}
+                $("#submit_button").attr("disabled", "disabled");
+                $("#errors").html("<li>Note: This survey hasn't been published, so you can not submit it.</li>")
+                {% ifnotequal user.username survey.user.username %}
+                    location.href = "/error_jump/response_unpublished_survey/"
+                {% endifnotequal %}
+            {% endif %}
+            {% if expired %}
+                $("#submit_button").attr("disabled", "disabled");
+                $("#errors").html("<li>Note: This survey is expired already..</li>")
+            {% endif %}
+            surveyID = {{ survey.id }};
+            total = $(".singleQuestionDiv").length;
+            if (total == 0){
+                alert("empty survey");
+                return;
+            }
+            $("#submit_button").click(function(){
+                errors = "";
+                validate();
+
+            });
+
+        });
+        function addAnswer(){
+            count = 0;
+            for (var i=1;i<=total;i++){
+                var curQuestionDiv = $(".singleQuestionDiv:nth-child("+i+")");
+                var questionNo = curQuestionDiv.find(".question_no").text();
+                questionNo = questionNo.slice(1,-1);
+                var questionType = "";
+                if (curQuestionDiv.hasClass("paragraph"))
+                    questionType = "paragraph";
+                else if (curQuestionDiv.hasClass("numeric"))
+                    questionType = "numeric";
+                else if (curQuestionDiv.hasClass("multiplechoice"))
+                    questionType = "multiplechoice";
+                else if (curQuestionDiv.hasClass("checkbox"))
+                    questionType = "checkbox";
+                else if (curQuestionDiv.hasClass("scale"))
+                    questionType = "scale";
+                else if (curQuestionDiv.hasClass("text"))
+                    questionType = "text";
+                else if (curQuestionDiv.hasClass("date"))
+                    questionType = "date";
+
+                if (questionType=="paragraph"||questionType=="numeric"||questionType=="date"||questionType=="text"){
+                    value = $(curQuestionDiv).find(".value").val();
+                }
+                else if (questionType =="scale"){
+                    value = $(curQuestionDiv).find(".value").text();
+                }
+                else{
+                    value = "";
+                    $(curQuestionDiv).find(".value").each(function(index){
+                        if ($(this).is(":checked"))
+                            value += index+",";
+                    });
+                    value = value.slice(0,-1);
+                }
+                $.post("/response/"+responseID+"/",
+                        {
+                            id_in_response : i,
+                            value : value,
+                            type :questionType,
+                        },
+                        function(result){
+                            count+=1;
+                            if (count==total){
+                                //alert("Submit successful!");
+                                location.href = "/complete/"+"{{ survey.key }}/"
+                            }
+                        },"json");
+
+
+            }
+
+
+        }
+        function validate(){
+            count = 0;
+            for (var i=1;i<=total;i++){
+                var curQuestionDiv = $(".singleQuestionDiv:nth-child("+i+")");
+                var questionNo = curQuestionDiv.find(".question_no").text();
+                questionNo = questionNo.slice(1,-1);
+                var questionType = "";
+                if (curQuestionDiv.hasClass("paragraph"))
+                    questionType = "paragraph";
+                else if (curQuestionDiv.hasClass("numeric"))
+                    questionType = "numeric";
+                else if (curQuestionDiv.hasClass("multiplechoice"))
+                    questionType = "multiplechoice";
+                else if (curQuestionDiv.hasClass("checkbox"))
+                    questionType = "checkbox";
+                else if (curQuestionDiv.hasClass("scale"))
+                    questionType = "scale";
+                else if (curQuestionDiv.hasClass("text"))
+                    questionType = "text";
+                else if (curQuestionDiv.hasClass("date"))
+                    questionType = "date";
+
+                if (questionType=="paragraph"||questionType=="numeric"||questionType=="date"||questionType=="text"){
+                    value = $(curQuestionDiv).find(".value").val();
+                }
+                else if (questionType =="scale"){
+                    value = $(curQuestionDiv).find(".value").text();
+                }
+                else{
+                    value = "";
+                    $(curQuestionDiv).find(".value").each(function(index){
+                        if ($(this).is(":checked"))
+                            value += index+",";
+                    });
+                    value = value.slice(0,-1);
+                }
+                $.post("/validate_answer/",
+                        {
+                            surveyID : {{ survey.id }},
+                            id_in_response : i,
+                            value : value,
+                            type : questionType,
+                        },
+                        function(result){
+                            count+=1;
+                            errors += result.errors;
+                            if (count==total&&errors==""){
+                                createResponse();
+                            } else{
+                                $("#errors").html(errors);
+                            }
+                        },"json");
+
+
+            }
+
+
+        }
+        function createResponse(){
+            $.post("/create_response/",
+                    {
+                        dt_start : '{{ dt_start }}',
+                        surveyID : {{ survey.id }}
+                    },
+                    function(result){
+                        responseID = result.responseID;
+                        addAnswer();
+                    },"json");
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <style type="text/css">
+
+        body
+        {
+            background:url({{ STATIC_URL }}img/themes/{{ theme_name }}.jpg);
+            background-repeat:no-repeat;
+            background-size:cover;
+        }
+
+    </style>
+    <div id="survey_title" class=""><h2>{{ survey.title }}</h2></div>
+    <div id="survey_description" class="">{{ survey.description }}</div>
+    <div style="color: #696969;" id="deadline">Deadline:{{ survey.deadline }}</div>
+    <br>
+    <div id="question_container" class="">
+        {% for question in questions %}
+            <div class="singleQuestionDiv {{ question.type }}">
+                <span class="question_no">Q{{ question.id_in_survey }}:</span>
+                <span class="question_description">{{ question.title }}</span>
+                {% if question.is_required %}
+                    <span class="is_required">*</span>
+                {% endif %}
+                <br>
+                <span class="question_helptext">{{ question.help_text }}</span><br>
+                {% ifequal question.type 'paragraph' %}
+                    <textarea class="paragraph_question value"></textarea>
+                    <br>
+                    <span class="">(Max: {{ question.paragraphquestion.max_no_characters }} characters)</span>
+                {% endifequal %}
+                {% ifequal question.type 'numeric' %}
+                    <input type="text" class="numeric_question value">
+                    <span class="">({{ question.numericquestion.min_value }}-{{ question.numericquestion.max_value }})</span>
+                {% endifequal %}
+                {% ifequal question.type 'checkbox' %}
+                    <div class="selection_container">
+                        {% for choice in question.checkboxquestion.choices.all %}
+                            <div class="selection">
+                                <input type="checkbox" class="checkbox_option value" name="{{ question.id_in_survey }}">
+                                <span class="">{{ choice.label }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <span class="">(Please select {{ question.checkboxquestion.min_checked }}-{{ question.checkboxquestion.max_checked }} selections.)</span>
+                {% endifequal %}
+                {% ifequal question.type 'multiplechoice' %}
+                    <div class="selection_container">
+                        {% for choice in question.multiplechoicequestion.choices.all %}
+                            <div class="selection"><input type="radio" class="mcq_option value" name="{{ question.id_in_survey }}"><span class="">&nbsp;{{ choice.label }}</span></div>
+                        {% endfor %}
+                    </div>
+                {% endifequal %}
+                {% ifequal question.type 'scale' %}
+                    <div class="slider_attr">
+                        (Min: <span class="slider_min">{{ question.scalequestion.min_value }}</span>;
+                        Max: <span class="slider_max">{{ question.scalequestion.max_value  }}</span> ;
+                        Increment: <span class="slider_increment">{{ question.scalequestion.increment }}) </span>
+                    </div>
+                    value:<span class="slider_value value"></span>
+                    <div class="slider"></div>
+                {% endifequal %}
+                {% ifequal question.type 'date' %}
+                    <div class="datepicker_container">Date: <input type="text" value="{{ question.datequestion.start_value|date:"d/m/Y" }}" class="datepicker value" />
+                        <span class="hide datepicker_min_value">{{ question.datequestion.min_value|date:"d/m/Y" }}</span>
+                        <span class="hide datepicker_max_value">{{ question.datequestion.max_value|date:"d/m/Y" }}</span>
+                    </div>
+                {% endifequal %}
+                {% ifequal question.type 'text' %}
+                    <input type="text" class="value"/><span>(Max character: {{ question.textquestion.max_no_characters }})</span>
+                {% endifequal %}
+            </div>
+        {% endfor %}
+        <ul id="errors"></ul>
+    </div>
+
+    <div class="submit_survey_div clearBoth">
+
+        <button id="submit_button" class="btn btn-danger">Submit</button>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <footer class="footer">
+        <div class="container">
+            <!--  row of columns -->
+            <div class="row centre">
+                <div class="span4">
+                    {% block social %}{% endblock %}
+                </div>
+                <div class="span4">
+
+                    <ul class="footer-links">
+                       {% load static %}
+
+                        <p>Powered by <a href="/"><i>Stardom</i></a></p>
+                        <li><img src="{% static "img/logo.png" %}" alt=""></li>
+                    </ul>
+                </div>
+                <div class="span4">
+
+
+                </div>
+                <script>
+                    $("#set_lang_select").change(function () {
+                        $('#lang_form').submit();
+                    });
+                </script>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

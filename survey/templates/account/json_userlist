@@ -1,0 +1,20 @@
+{
+    "sEcho": {{sEcho}},
+    "iTotalRecords": {{iTotalRecords}},
+    "iTotalDisplayRecords": {{iTotalDisplayRecords}},
+    "aaData":[
+    {% for user in querySet %}
+    [
+
+        "{{user.username}}",
+        "{{user.first_name}}",
+        "{{user.last_name}}",
+        "{{user.email}}",
+        "{{user.tld}}"
+    ]
+    {% if not forloop.last %}
+    ,
+    {% endif %}
+    {% endfor %}
+    ]
+}

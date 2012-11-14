@@ -1,0 +1,26 @@
+{% extends "cxq_base.html" %}
+
+{% block title %} Registration {% endblock %}
+{% block script %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("#btnPost").click(function () {
+                $.post('',
+                        {
+                            content:$('#inputContent').val(),
+                        },
+                        function (result) {
+                            $('#message').html(result.IP + "\nYour message is:" + result.message);
+                        }, "json");
+            });
+    </script>
+{% endblock %}
+
+{% block content %}
+    adsfadsf
+    <form id="registration" action="/cxq_register/" method="POST">
+        {{ register_form.as_ul }}
+        <input type="button" id="btnPost" value="submit"/>
+    </form>
+{% endblock %}

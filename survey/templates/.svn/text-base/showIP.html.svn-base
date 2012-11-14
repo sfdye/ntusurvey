@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Untitled Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("#btnPost").click(function () {
+                $.post($('#inputURL').val(),
+                        {
+                            content:$('#inputContent').val(),
+                        },
+                        function (result) {
+                            $('#message').html(result.IP + "\nYour message is:" + result.message);
+                        }, "json");
+            });
+            $("#submit").click(function () {
+                var answers = getAnswer();
+                $.post('/result/',
+                        {
+                            answer1:answers[0],
+                            answer2:answers[1],
+                            answer3:answers[2],
+
+                        },
+                        function (result) {
+                            $('#resultDiv').html(result.result);
+                        }, "json");
+
+            });
+        });
+        function getAnswer() {
+            var answer1 = '', answer2 = '', answer3 = '';
+            for (var i = 0; i < surveyForm.question1.length; i++) {
+                if (surveyForm.question1[i].checked == true)
+                    answer1 = surveyForm.question1[i].value;
+            }
+            for (var i = 0; i < surveyForm.question2.length; i++) {
+                if (surveyForm.question2[i].checked == true)
+                    answer2 = surveyForm.question2[i].value;
+            }
+            for (var i = 0; i < surveyForm.question3.length; i++) {
+                if (surveyForm.question3[i].checked == true)
+                    answer3 = surveyForm.question3[i].value;
+            }
+            var answers = new Array(answer1, answer2, answer3);
+            return answers;
+        }
+    </script>
+</head>
+
+<body>
+<p>content:
+    <input type="text" id="inputContent" value="test Content!">
+</p>
+
+<p>
+    <input type="button" id="btnPost" value="SendAjax">
+</p>
+
+<div id="message"></div>
+<div id="surveyDiv">
+    <ul>
+        <form id="surveyForm">
+            Question 1:
+            <li>
+                <input type="radio" name="question1" value="choice1"/> choice1<br/>
+                <input type="radio" name="question1" value="choice2"/> choice2<br/>
+                <input type="radio" name="question1" value="choice3"/> choice3<br/>
+                <input type="radio" name="question1" value="choice4"/> choice4<br/>
+            </li>
+            Question 2:
+            <li>
+
+                <input type="radio" name="question2" value="choice1"/> choice1<br/>
+                <input type="radio" name="question2" value="choice2"/> choice2<br/>
+                <input type="radio" name="question2" value="choice3"/> choice3<br/>
+                <input type="radio" name="question2" value="choice4"/> choice4<br/>
+            </li>
+            Question 3:
+            <li>
+
+                <input type="radio" name="question3" value="choice1"/> choice1<br/>
+                <input type="radio" name="question3" value="choice2"/> choice2<br/>
+                <input type="radio" name="question3" value="choice3"/> choice3<br/>
+                <input type="radio" name="question3" value="choice4"/> choice4<br/>
+            </li>
+            <input type="button" name="submit" id="submit" value="Submit"/>
+        </form>
+    </ul>
+</div>
+<div id="resultDiv"></div>
+</body>
+</html>

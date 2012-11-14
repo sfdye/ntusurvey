@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+{% block head %}
+
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+    <title>DataTables example</title>
+    {% load static %}
+
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8"
+            src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js"></script>
+
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8"
+            src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
+
+
+
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        $(document).ready(function () {
+            $('#users-table').dataTable({
+                'sPaginationType':'full_numbers',
+                "bServerSide":true,
+                "sAjaxSource":"{% url survey.account_views.get_users_list %}",
+                "aoColumns":[
+                    { "bSearchable":true},
+                    { "bSearchable":true},
+                    { "bSearchable":true},
+                    { "bSearchable":true}
+
+                ]
+            });
+        });
+        /* ]]> */
+    </script>
+
+{% endblock %}
+
+{% block content %}
+    <a href="/">Back to index</a>
+    <div style="width:50%;">
+        <table id="users-table" style="width:100%;">
+            <thead>
+            <tr>
+                <th>
+                    User Name
+                </th>
+                <th>
+                    First Name
+                </th>
+                <th>
+                    Last name
+                </th>
+                <th>
+                    Email
+                </th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+</html>

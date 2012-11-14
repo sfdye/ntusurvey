@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block navigationBar %}{% endblock %}
+
+{% block content %}
+    <style type="text/css">
+        body {
+            text-align: center;
+        }
+    </style>
+    <h2>Thank you! Your response has been recorded.<h2>
+
+    <a style="font-size: 0.700em;" class="btn btn-link" type="button" href="/view_survey/{{ view_key }}/">Submit another
+        response</a>
+    <a style="font-size: 0.700em;" class="btn btn-link" type="button" href="/">Create your own survey</a>
+
+{% endblock %}
+
+
+{% block footer %}
+    <footer class="footer">
+        <div class="container">
+            <!--  row of columns -->
+            <div class="row centre">
+                <div class="span4">
+                    {% block social %}{% endblock %}
+                </div>
+                <div class="span4">
+
+                    <ul class="footer-links">
+                        {% load static %}
+
+                        <p>Powered by <a href="/"><i>Stardom</i></a></p>
+                        <li><img src="{% static "img/logo.png" %}" alt=""></li>
+                    </ul>
+                </div>
+                <div class="span4">
+
+
+                </div>
+                <script>
+                    $("#set_lang_select").change(function () {
+                        $('#lang_form').submit();
+                    });
+                </script>
+            </div>
+        </div>
+    </footer>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="text-align: center;">
+        <h3>Congratulation! Your survey has been published!</h3>
+        <h3>Click <a style="color: #8b0000;" href="http://{{ SITE_URL }}/view_survey/{{ key }}">here</a> to view the published survey.</h3>
+
+        <div class="progress">
+            <div class="bar bar-success" style="width: 33%;"></div>
+            <div class="bar bar-warning" style="width: 33%;"></div>
+            <div class="bar bar-danger" style="width: 0%;"></div>
+        </div>
+        <h4>Now it's published. What's Next?</h4>
+
+        <h4>Copy the link to share:</h4>
+        <span class="input-xxlarge uneditable-input">http://{{ SITE_URL }}/view_survey/{{ key }}</span>
+        <h4>Or visit the <a href="/">account panel</a> to find more.</h4>
+
+
+    </div>
+
+{% endblock %}

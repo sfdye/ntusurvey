@@ -1,0 +1,173 @@
+{% load admin_static %}{% load url from future %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
+    <style type="text/css">
+
+        body {
+            background: url({{ STATIC_URL }}img/grass.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+    </style>
+
+    <style xmlns="http://www.w3.org/1999/html">
+        a:link {
+            color: #000000;
+        }
+
+        a:hover {
+            color: #ff4500;
+        }
+    </style>
+
+    <link rel="stylesheet" href="{% static "css/bootstrap-responsive.css" %}">
+    <link rel="stylesheet" href="{% static "css/docs.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" href="{% static "js/google-code-prettify/prettify.css" %}">
+    <link rel="stylesheet" href="{% static "css/datepicker.css" %}">
+
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/bootstrap-transition.js" %}"></script>
+    <script src="{% static "js/bootstrap-alert.js" %}"></script>
+    <script src="{% static "js/bootstrap-modal.js" %}"></script>
+    <script src="{% static "js/bootstrap-dropdown.js" %}"></script>
+    <script src="{% static "js/bootstrap-scrollspy.js" %}"></script>
+    <script src="{% static "js/bootstrap-tab.js" %}"></script>
+    <script src="{% static "js/bootstrap-tooltip.js" %}"></script>
+    <script src="{% static "js/bootstrap-popover.js" %}"></script>
+    <script src="{% static "js/bootstrap-button.js" %}"></script>
+    <script src="{% static "js/bootstrap-collapse.js" %}"></script>
+    <script src="{% static "js/bootstrap-carousel.js" %}"></script>
+    <script src="{% static "js/bootstrap-typeahead.js" %}"></script>
+    <script src="{% static "js/jquery.validate.min.js" %}"></script>
+    <script src="{% static "js/registration_form.js" %}"></script>
+    <script src="{% static "js/bootstrap-typeahead.js" %}"></script>
+    <script src="{% static "js/bootstrap-affix.js" %}"></script>
+    <script src="{% static "js/bootstrap-datepicker.js" %}"></script>
+    <script src="{% static "js/application.js" %}"></script>
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+
+    <link rel="shortcut icon" href="{% static "img/icon.png" %}">
+
+
+
+
+    {% block extrastyle %}{% endblock %}
+    <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="{% block stylesheet_ie %}{% static "admin/css/ie.css" %}{% endblock %}" /><![endif]-->
+    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
+    <script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";</script>
+    {% block extrahead %}{% endblock %}
+    {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+</head>
+{% load i18n %}
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}">
+
+<!-- Container -->
+<div id="container">
+
+    {% if not is_popup %}
+        <!-- Header -->
+        <div id="header" style="background-color: #808080;">
+            <div id="branding">
+                {% block branding %}{% endblock %}
+            </div>
+            {% if user.is_active and user.is_staff %}
+                <div id="user-tools">
+                    {% trans 'Welcome to Stardom NTUSurvey,' %}
+                    <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
+                    {% block userlinks %}
+                        {% url 'django-admindocs-docroot' as docsroot %}
+                        {% if docsroot %}
+                            <a href="{{ docsroot }}">{% trans 'Documentation' %}</a> /
+                        {% endif %}
+                        <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+                        <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+                    {% endblock %}
+                </div>
+            {% endif %}
+            {% block nav-global %}{% endblock %}
+        </div>
+        <!-- END Header -->
+        {% block breadcrumbs %}
+            <div class="breadcrumbs">
+                <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                {% if title %} &rsaquo; {{ title }}{% endif %}
+            </div>
+        {% endblock %}
+    {% endif %}
+
+    {% block messages %}
+        {% if messages %}
+            <ul class="messagelist">{% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}</ul>
+        {% endif %}
+    {% endblock messages %}
+
+    <!-- Content -->
+    <div id="content" class="{% block coltype %}colM{% endblock %}">
+        {% block pretitle %}{% endblock %}
+        {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+        {% block content %}
+            {% block object-tools %}{% endblock %}
+            {{ content }}
+        {% endblock %}
+        {% block sidebar %}{% endblock %}
+        <br class="clear" />
+    </div>
+    <!-- END Content -->
+
+    {% block footer %}<div id="footer">
+<p class = "btn btn-large" style=""><a href="/">Visit Main Site</a></p>
+
+<footer class="footer">
+    <div class="container">
+        <!--  row of columns -->
+        <div class="row centre">
+            <div class="span4">
+            </div>
+            <div class="span4">
+
+                <ul class="footer-links">
+
+                    <li><img src="{% static "img/logo.png" %}" alt=""></li>
+                </ul>
+            </div>
+            <div class="span4">
+
+
+            </div>
+            <script>
+                $("#set_lang_select").change(function () {
+                    $('#lang_form').submit();
+                });
+            </script>
+        </div>
+    </div>
+</footer>
+
+        </div>{% endblock %}
+
+</div>
+<!-- END Container -->
+
+</body>
+</html>

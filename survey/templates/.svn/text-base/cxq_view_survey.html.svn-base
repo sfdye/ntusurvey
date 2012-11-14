@@ -1,0 +1,136 @@
+{% extends "cxq_base.html" %}
+
+{% block title %} View survey - {{ survey.title }} {% endblock %}
+{% block script %}
+    <style>
+        #question_container {
+            width: 700px;
+        }
+
+        .singleQuestionDiv {
+            float: left;
+            clear: left;
+            width: 600px;
+        }
+
+        .questionDiv {
+            width: 700px;
+        }
+
+        .clearBoth {
+            clear: both;
+        }
+
+
+    </style>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css"/>
+    <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.0/jquery-ui.js"></script>
+    <script>
+        responseID = ""
+        $(function () {
+            surveyID = {{ survey.id }};
+            total = $(".singleQuestionDiv").length;
+            if (total == 0) {
+                alert("empty survey");
+                return;
+            }
+            $("#submit_button").click(function () {
+                $.post("/create_response_cxq/",
+                        {
+                            dt_start:'{{ dt_start }}',
+                            surveyID: {{ survey.id }}
+                        },
+                        function (result) {
+                            responseID = result.responseID;
+                            addAnswer();
+                        }, "json");
+            });
+
+        });
+        function addAnswer() {
+            for (var i = 1; i <= total; i++) {
+                var curQuestionDiv = $(".singleQuestionDiv:nth-child(" + i + ")");
+                var questionNo = curQuestionDiv.find(".question_no").text();
+                questionNo = questionNo.slice(1, -1);
+                var questionType = "";
+                if (curQuestionDiv.hasClass("paragraph"))
+                    questionType = "paragraph";
+                else if (curQuestionDiv.hasClass("numeric"))
+                    questionType = "numeric";
+                else if (curQuestionDiv.hasClass("multiplechoice"))
+                    questionType = "multiplechoice";
+                else if (curQuestionDiv.hasClass("checkbox"))
+                    questionType = "checkbox";
+                if (questionType == "paragraph" || questionType == "numeric") {
+                    value = $(curQuestionDiv).find(".value").val();
+                }
+                else {
+                    value = "";
+                    $(curQuestionDiv).find(".value").each(function (index) {
+                        if ($(this).is(":checked"))
+                            value += (index + 1) + ",";
+                    });
+                    value = value.slice(0, -1);
+                }
+                $.post("/response/" + responseID + "/",
+                        {
+                            id_in_response:i,
+                            value:value,
+                            type:questionType,
+                        },
+                        function (result) {
+                        }, "json");
+
+
+            }
+            alert("Submit successful!");
+
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div id="survey_title" class="">New Survey(Click to change)</div>
+    <div id="survey_description" class="">Add description here</div>
+    <div id="question_container" class="">
+        {% for question in questions %}
+            <div class="singleQuestionDiv {{ question.type }}">
+                <span class="question_no">Q{{ question.id_in_survey }}:</span>
+                <span class="question_description">{{ question.title }}</span><br>
+                <span class="question_helptext">{{ question.help_text }}</span><br>
+                {% ifequal question.type 'paragraph' %}
+                    <textarea class="paragraph_question value"></textarea>
+                {% endifequal %}
+                {% ifequal question.type 'numeric' %}
+                    <input type="text" class="numeric_question value">
+                    <span class="">({{ question.numericquestion.min_value }}-{{ question.numericquestion.max_value }})</span>
+                {% endifequal %}
+                {% ifequal question.type 'checkbox' %}
+                    <div class="selection_container">
+                        {% for choice in question.checkboxquestion.choices.all %}
+                            <div class="selection">
+                                <input type="checkbox" class="checkbox_option value" name="{{ question.id_in_survey }}">
+                                <span class="">{{ choice.label }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endifequal %}
+                {% ifequal question.type 'multiplechoice' %}
+                    <div class="selection_container">
+                        {% for choice in question.multiplechoicequestion.choices.all %}
+                            <div class="selection"><input type="radio" class="mcq_option value"
+                                                          name="{{ question.id_in_survey }}"><span
+                                    class="">{{ choice.label }}</span></div>
+                        {% endfor %}
+                    </div>
+                {% endifequal %}
+
+            </div>
+        {% endfor %}
+    </div>
+    <div class="submit_survey_div clearBoth">
+
+        <button id="submit_button">Submit</button>
+    </div>
+{% endblock %}
