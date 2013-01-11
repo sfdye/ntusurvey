@@ -2,7 +2,7 @@
 =========
 ##Description##
 
-CZ2006 Software Engineering Course Project, Online Survey System powered by [Django](https://www.djangoproject.com/) and [Boostrap](http://twitter.github.com/bootstrap/).
+CZ2006 Software Engineering Course Project, Online Survey System powered by [Django](https://www.djangoproject.com/) and [Bootstrap](http://twitter.github.com/bootstrap/).
 
 ##Live Demo##
 Demo [here](http://ntusurvey.sfdye.com) 
