@@ -5,7 +5,7 @@
 CZ2006 Software Engineering Course Project, Online Survey System powered by [Django](https://www.djangoproject.com/) and [Bootstrap](http://twitter.github.com/bootstrap/).
 
 ##Live Demo##
-Demo [here](http://ntusurvey.sfdye.com) (Hosting no longer available)
+Demo [here](http://ntusurvey.sfdye.com)
 
 ##Dependencies##
 * [python-mysql](http://sourceforge.net/projects/mysql-python/)
@@ -13,6 +13,7 @@ Demo [here](http://ntusurvey.sfdye.com) (Hosting no longer available)
 * [south](https://github.com/lambdafu/django-south)
 * [django-qrcode](https://github.com/zocolab/django-qrcode)
 * [pygeoip](https://github.com/appliedsec/pygeoip)
+* [google-chart](https://developers.google.com/chart/)
 
 ##Contributors##
 * Wan Liuyang
