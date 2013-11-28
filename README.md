@@ -9,7 +9,7 @@ CZ2006 Software Engineering Course Project, Online Survey System powered by [Dja
 
 ##Features##
 * User registration and login
-![login](http://raw.github.com/sfdye/ntusurvey/master/screenshots/login.png])
+![login](http://raw.github.com/sfdye/ntusurvey/master/screenshots/login.png)
 
 ##Dependencies##
 * [python-mysql](http://sourceforge.net/projects/mysql-python/)
