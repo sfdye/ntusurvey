@@ -2,10 +2,14 @@
 =========
 ##Description##
 
-CZ2006 Software Engineering Course Project, Online Survey System powered by [Django](https://www.djangoproject.com/) and [Bootstrap](http://twitter.github.com/bootstrap/).
+CZ2006 Software Engineering Course Project, Online Survey System powered by [Django](https://www.djangoproject.com/)(v1.4) and [Bootstrap](http://twitter.github.com/bootstrap/)(v2).
 
 ##Live Demo##
-Demo [here](http://ntusurvey.sfdye.com)
+* Demo [here](http://survey.sfdye.com) hosted on [webfaction](https://www.webfaction.com/)
+
+##Features##
+* User registration and login
+![login.png](http://raw.github.com/sfdye/ntusurvey/master/screenshots/] "Sign up and Login")
 
 ##Dependencies##
 * [python-mysql](http://sourceforge.net/projects/mysql-python/)
