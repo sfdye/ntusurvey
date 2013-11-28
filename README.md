@@ -1,5 +1,5 @@
 #NTU Survey#
-=========
+---
 ##Description##
 
 For CZ2006 Software Engineering Course Project.
@@ -10,15 +10,15 @@ NTU Survey is a google-forms-like survey creation and management system powered 
 * Demo [here](http://survey.sfdye.com) hosted on [webfaction](https://www.webfaction.com/)
 
 ##Key Features##
-* User registration and login
+* User sign up and login
 ![Sign up](http://raw.github.com/sfdye/ntusurvey/master/screenshots/sign_up.png)
 ![Login](http://raw.github.com/sfdye/ntusurvey/master/screenshots/login.png)
 * Friendly and powerful dashboard
 ![Dashboard](http://raw.github.com/sfdye/ntusurvey/master/screenshots/dashboard.png)
 * Create survey at ease
-*![Create Survey](http://raw.github.com/sfdye/ntusurvey/master/screenshots/create_survey.png)
+![Create Survey](http://raw.github.com/sfdye/ntusurvey/master/screenshots/create_survey.png)
 * Easy share by email
-* ![Collaboration](http://raw.github.com/sfdye/ntusurvey/master/screenshots/share.png)
+![Collaboration](http://raw.github.com/sfdye/ntusurvey/master/screenshots/share.png)
 * Graphical analysis powered google-charts (question specific stats, time stats, and demography)
 ![Question](http://raw.github.com/sfdye/ntusurvey/master/screenshots/question.png)
 ![Daily](http://raw.github.com/sfdye/ntusurvey/master/screenshots/daily.png)
