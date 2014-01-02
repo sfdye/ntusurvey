@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from django.utils.cache import add_never_cache_headers
-from django.utils import simplejson
+import json
 from datetime import datetime,timedelta
 
 def show_paragraph(max_character=1000,number_of_columns=100, number_of_rows=50,is_required=True):

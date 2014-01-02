@@ -5,3 +5,12 @@
 *.pot
 *.pyc
 local_settings.py
+
+ntusurvey/settings.py
+
+sitestatic/
+
+*.sublime-project
+*.sublime-workspace
+
+*.sql

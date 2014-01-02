@@ -15,7 +15,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'ntusurvey', # Or path to database file if using sqlite3.
         'USER': 'root', # Not used with sqlite3.
-        'PASSWORD': '', # Not used with sqlite3.
+        'PASSWORD': '1910', # Not used with sqlite3.
         'HOST': '', # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '', # Set to empty string for default. Not used with sqlite3.
     }
@@ -82,7 +82,7 @@ STATICFILES_FINDERS = (
     )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = ''
+SECRET_KEY = 'm5t%v6^5u#o@g*w70uhp-2qtw0*igm4ol_c_*p=n&9!egh8@)f'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

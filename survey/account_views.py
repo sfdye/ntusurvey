@@ -18,7 +18,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
 from django.contrib.sites.models import get_current_site
 #<!-------->
-import sha
+import hashlib
 from django.core.mail import send_mail
 
 def register(request):

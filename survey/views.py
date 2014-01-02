@@ -1,12 +1,13 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils import simplejson
+import json
 from datetime import datetime, timedelta
 from util import *
 from survey.models import *
 from django.contrib.auth.decorators import login_required
-from django.core.validators import email_re
+#from django.core.validators import email_re
+from django.core.validators import validate_email
 from django.core.mail import send_mail
 from django.contrib.sites.models import get_current_site
 from django.contrib import messages
@@ -745,7 +746,7 @@ def complete(request, view_key=""):
 
 
 def is_valid_email(email):
-    return True if email_re.match(email) else False
+    return validate_email(email) 
 
 
 def share_survey(request):

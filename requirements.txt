@@ -1,0 +1,4 @@
+South==0.8.4
+shortuuid==0.4
+django-qrcode==0.3
+pygeoip==0.3.0
