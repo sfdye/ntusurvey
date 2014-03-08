@@ -1,13 +1,15 @@
 #NTU Survey#
+
 ---
+
 ##Description##
 
 For CZ2006 Software Engineering Course Project.
 
-NTU Survey is a google-forms-like survey creation and management system powered by [Django](https://www.djangoproject.com/) (ver1.4, outdated) and [Bootstrap](http://twitter.github.com/bootstrap/) (v2, outdated).
+NTU Survey is a google-forms-like survey creation and management system powered by [Django](https://www.djangoproject.com/) and [Bootstrap](http://twitter.github.com/bootstrap/)
 
 ##Live Demo##
-* Demo [here](http://ntusurvey.liuyang.webfactional.com) hosted on [webfaction](https://www.webfaction.com/)
+* Demo [here](http://survey.sfdye.com)
 
 ##Key Features##
 * User sign up and login
