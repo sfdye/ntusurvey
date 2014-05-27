@@ -1,16 +1,18 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-import json
-from datetime import datetime, timedelta
-from util import *
-from survey.models import *
+from django.utils import simplejson
 from django.contrib.auth.decorators import login_required
-#from django.core.validators import email_re
-from django.core.validators import validate_email
 from django.core.mail import send_mail
 from django.contrib.sites.models import get_current_site
 from django.contrib import messages
+from django.conf import settings
+from django.db.models.aggregates import Min, Max, Avg
+from datetime import datetime, timedelta
+from util import *
+import json
+import pygeoip
+from survey.models import *
 
 def home(request):
     if  request.user.is_authenticated():
@@ -27,7 +29,7 @@ def print_survey(request, view_key, *args, **kwargs):
     if not survey.user.id == request.user.id and not survey.is_collaborator(request.user):
         return error_jump(request,"unauthorized")
     questions = survey.questions.order_by('id_in_survey')
-    request.session['dt_start'] = datetime.now()
+    request.session['dt_start'] = json.dumps(datetime.now(), default=date_handler)
     dict = {'survey': survey, 'questions': questions, 'dt_start': datetime.now()}
     return render_to_response('print.html', dict, RequestContext(request))
 
@@ -38,9 +40,9 @@ def string_cmp((k1, v1), (k2, v2)):
 def date_cmp((k1, v1), (k2, v2)):
     return cmp(datetime.strptime(k1, '%d %B'), datetime.strptime(k2, '%d %B'))
 
-import pygeoip
-from django.conf import settings
-from django.db.models.aggregates import Min, Max, Avg
+
+def date_handler(obj):
+    return obj.isoformat() if hasattr(obj, 'isoformat') else obj
 
 @login_required()
 def analyse(request, view_key=""):
@@ -160,7 +162,7 @@ def analyse(request, view_key=""):
 
     dict = {'survey': survey,
             'questions': questions,
-            # 'dt_start': datetime.now(),
+            'dt_start': datetime.now(),
             'responses': responses,
             'zipped': zipped,
             'time_data' : time_data,
@@ -699,7 +701,7 @@ from survey.models import Survey
 def view_survey(request, view_key, *args, **kwargs):
     survey = Survey.objects.get(key=view_key)
     questions = survey.questions.order_by('id_in_survey')
-    request.session['dt_start'] = datetime.now()
+    request.session['dt_start'] = json.dumps(datetime.now(), default=date_handler)
     theme_name = survey.theme_name
     deadline = survey.deadline
     now = datetime.now()
@@ -712,12 +714,6 @@ def view_survey(request, view_key, *args, **kwargs):
     dict = {'survey': survey, 'questions': questions, 'dt_start': datetime.now(), 'theme_name': theme_name,
             'deadline': deadline, 'expired': expired}
     return render_to_response('respondent.html', dict, RequestContext(request))
-
-#def view_survey(request, view_key, *args, **kwargs):
-# #   survey = Survey.objects.get(id = view_key)
-#    survey = Survey.objects.get(key = view_key)
-#    questions = survey.questions.order_by('id_in_survey')
-#    return render_to_response('respondent.html', {'survey' : survey, 'questions' : questions}, RequestContext(request))
 
 def error_jump(request, error_type="404"):
     message = ""
@@ -746,7 +742,7 @@ def complete(request, view_key=""):
 
 
 def is_valid_email(email):
-    return validate_email(email) 
+    return True if email_re.match(email) else False
 
 
 def share_survey(request):
